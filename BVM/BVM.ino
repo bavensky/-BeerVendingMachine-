@@ -14,8 +14,10 @@ byte beer1 = 0, beer2 = 0, beer3;
 byte timeOutWIFI = 0;
 
 
-const char* ssid = "belkin.636";
-const char* password = "3eb7e66b";
+//const char* ssid = "belkin.636";
+//const char* password = "3eb7e66b";
+const char* ssid = "tong";
+const char* password = "man09min";
 String apiKey = "U9UX97AKPPHR1RNK";
 
 
