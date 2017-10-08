@@ -10,16 +10,36 @@ byte LED = 2;
 byte btBeer1 = 0, btBeer2 = 12, btBeer3 = 13, btBeer4 = 14;
 
 
-byte beer1 = 0, beer2 = 0, beer3;
+byte beer1 = 0, beer2 = 0, beer3 = 0, beer4 = 0;
 byte timeOutWIFI = 0;
 
 
-//const char* ssid = "belkin.636";
-//const char* password = "3eb7e66b";
-const char* ssid = "tong";
-const char* password = "man09min";
-String apiKey = "U9UX97AKPPHR1RNK";
+const char* ssid = "belkin.636";
+const char* password = "3eb7e66b";
+//const char* ssid = "tong";
+//const char* password = "man09min";
+String apiKey = "4QLHRBN0XRHRD4SJ";
 
+/*
+   Servo sweep
+  if (i >= 70 && state == true) {
+    myservo.write(i);
+    Serial.println(i);
+    delay(100);
+    i--;
+  } else {
+    state = false;
+  }
+
+  if(i <= 120 && state == false) {
+    myservo.write(i);
+    Serial.println(i);
+    delay(100);
+    i++;
+  } else {
+    state = true;
+  }
+*/
 
 void setup() {
   Serial.begin(9600);
@@ -74,15 +94,20 @@ void loop() {
   if (beer3 <= 9)  lcd.print("0");
   lcd.print(beer3);
 
-  if (digitalRead(btBeer1) == 0) {
+
+
+  if (digitalRead(btBeer1) == 0) beer1 += 1;
+  if (digitalRead(btBeer2) == 0) beer2 += 1;
+  if (digitalRead(btBeer3) == 0) beer3 += 1;
+  if (digitalRead(btBeer4) == 0) beer4 += 1;
+
+  if (digitalRead(btBeer1) == 0 || digitalRead(btBeer2) == 0 ||
+      digitalRead(btBeer3) == 0 || digitalRead(btBeer4) == 0) {
     digitalWrite(LED, LOW);
-    doHttpGet(beer1, beer2, beer3);
+    doHttpGet(beer1, beer2, beer3, beer4);
   } else {
     digitalWrite(LED, HIGH);
   }
-  if (digitalRead(btBeer2) == 0) beer1 += 1;
-  if (digitalRead(btBeer3) == 0) beer2 += 1;
-  if (digitalRead(btBeer4) == 0) beer3 += 1;
 
   Serial.print(digitalRead(btBeer1));
   Serial.print("  ");
@@ -91,21 +116,25 @@ void loop() {
   Serial.print(digitalRead(btBeer3));
   Serial.print("  ");
   Serial.println(digitalRead(btBeer4));
+  Serial.print(beer1);
+  Serial.print("  ");
+  Serial.print(beer2);
+  Serial.print("  ");
+  Serial.print(beer3);
+  Serial.print("  ");
+  Serial.println(beer4);
   delay(200);
-
-
-  //  doHttpGet(beer1, beer2, beer3);
-  //  delay(15000);
-
+  Serial.println("  ");
+  Serial.println("  ");
 }
 
-void doHttpGet(int Ibeer1, int Ibeer2, int Ibeer3) {
+void doHttpGet(int Ibeer1, int Ibeer2, int Ibeer3, int Ibeer4) {
   HTTPClient http;
   Serial.print("[HTTP] begin...\n");
 
 
   http.begin("http://api.thingspeak.com/update?api_key=" + apiKey + "&field1=" + String(Ibeer1)
-             + "&field2=" + String(Ibeer2) + "&field3=" + String(Ibeer3)); //HTTP
+             + "&field2=" + String(Ibeer2) + "&field3=" + String(Ibeer3) + "&field4=" + String(Ibeer4)); //HTTP
 
 
   // start connection and send HTTP header
