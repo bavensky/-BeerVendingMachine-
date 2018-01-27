@@ -10,28 +10,30 @@
 
     RELAY  :
       GND     GND
-      SIG     13
+      SIG     9
 
     LCD i2c :
       GND     GND
       VCC     5V
-      SDA     04
-      SCL     05
+      SDA     A4
+      SCL     A5
+
     SERVO :
       GND     GND
       VCC     5V
-      SIG     14
+      SIG     8
+
     Flow sensor :
-      GND     12
+      GND     2
       VCC     GND
       SDA     5V
 
     Switch :
       GND     GND
-      BT1     15
-      BT2     02
-      BT3     00
-      BT4     16
+      BT1     4
+      BT2     5
+      BT3     6
+      BT4     7
 */
 
 
@@ -65,7 +67,7 @@ int pos = 0;
 int flowLevel = 0;
 boolean state = false;
 
-byte beer1 = 0, beer2 = 0, beer3 = 0, beer4 = 0;
+byte beer230 = 0, beer300 = 0, beer400;
 
 
 
@@ -120,44 +122,81 @@ void setup()  {
   pinMode(BT3, INPUT_PULLUP);
   pinMode(BT4, INPUT_PULLUP);
 
+  pinMode(RELAY, OUTPUT);
   pinMode(FLOW, INPUT_PULLUP);
   attachInterrupt(0, rpm, RISING);
-
-  lcd.setCursor(0, 0);
-  lcd.print("Beer Vending Machine");
-  //  lcd.setCursor(0, 1);
-  //  lcd.print("                    ");
-  //  lcd.setCursor(0, 2);
-  //  lcd.print("                    ");
-  //  lcd.setCursor(0, 3);
-  //  lcd.print("                    ");
 }
 
 void loop() {
+
+  // turn off relay
+  digitalWrite(RELAY, HIGH);
+
+
+  // main display
+  lcd.print("      Welcome       ");
+  lcd.setCursor(0, 1);
+  lcd.print("                    ");
+  lcd.setCursor(0, 2);
+  lcd.print("                    ");
+  lcd.setCursor(0, 3);
+  lcd.print(" Reduce bubble Beer ");
+
   Serial.println("main...");
-  digitalWrite(RELAY, LOW);
-  if (digitalRead(BT4) == 0) {
+  Serial.print(digitalRead(BT1));
+  Serial.print("  ");
+  Serial.print(digitalRead(BT2));
+  Serial.print("  ");
+  Serial.print(digitalRead(BT3));
+  Serial.print("  ");
+  Serial.println(digitalRead(BT4));
+
+
+  // manual mode
+  while (digitalRead(BT1) == 0) {
     delay(100);
-    beer1 += 1;
-    sentData(beer1, beer2, beer3);
-    Serial.println("button push");
-
-    //    cup.attach(CUP);
-    //    for (pos = 110; pos >= 80; pos -= 1) {
-    //      //      for (pos = 80; pos <= 110; pos += 1) {
-    //      cup.write(pos);
-    //      delay(50);
-    //    }
-
-    Serial.println("state true");
-    //    state = true;
+    Serial.println("manual modes");
+    digitalWrite(RELAY, LOW);
   }
 
+
+  // feed 400 ml
+  if (digitalRead(BT4) == 0) {
+    delay(100);
+
+    Serial.println("button beer 400 press");
+    beer400 += 1;
+    sentData(beer230, beer300, beer400);
+
+    lcd.setCursor(0, 0);
+    lcd.print("             400 ml.");
+    lcd.setCursor(0, 1);
+    lcd.print("> Amount : ");
+    if (beer400 <= 9)  lcd.print("0");
+    lcd.print(beer400);
+    lcd.print("      ");
+    lcd.setCursor(0, 2);
+    lcd.print("                    ");
+    lcd.setCursor(0, 3);
+    lcd.print("                    ");
+    state = true;
+  }
+
+
   while (state == true) {
+    cup.attach(CUP);
+    for (pos = 110; pos >= 30; pos -= 1) {  // ช่องขวา มองจากด้านหลัง
+      //      for (pos = 80; pos <= 110; pos += 1) { // ช่องซ้าย มองจากด้านหลัง
+      cup.write(pos);
+      delay(50);
+    }
+
     Serial.println("water pump");
+    digitalWrite(RELAY, LOW);
+    cup.write(30);  // ช่องขวา มองจากด้านหลัง
+    delay(5000);
     digitalWrite(RELAY, HIGH);
-    //    cup.write(110);
-    delay(2000);
+
     //    for (int i = 0; i <= 9; i++) {
     //      NbTopsFan = 0;
     //      sei();
@@ -167,29 +206,15 @@ void loop() {
     //      Serial.print(Calc, DEC);
     //      Serial.println(" L/hour");
     //    }
-    digitalWrite(RELAY, LOW);
-    //    for (pos = 110; pos >= 80; pos -= 1) {
-    for (pos = 80; pos <= 110; pos += 1) {
+
+
+
+    //    for (pos = 110; pos >= 80; pos -= 1) { // ช่องซ้าย มองจากด้านหลัง
+    for (pos = 30; pos <= 110; pos += 1) { // ช่องขวา มองจากด้านหลัง
       cup.write(pos);
       delay(50);
     }
     cup.detach();
     state = false;
   }
-
-
-  // first display
-  lcd.setCursor(0, 0);
-  lcd.print("Beer Vending Machine");
-  lcd.setCursor(0, 1);
-  lcd.print("> 400 ml.           ");
-  lcd.setCursor(0, 2);
-  lcd.print("> Amount : ");
-  if (beer1 <= 9)  lcd.print("0");
-  lcd.print(beer1);
-  lcd.print("      ");
-  lcd.setCursor(0, 3);
-  lcd.print("                    ");
-  delay(200);
-
 }
