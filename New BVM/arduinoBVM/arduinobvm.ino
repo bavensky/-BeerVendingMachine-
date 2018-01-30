@@ -133,10 +133,10 @@ void feedBeer(int b230, int b300, int b400) {
 
   //  while (state == true) {
   cup.attach(CUP);
-  for (pos = 120; pos >= 30; pos -= 3) {  // ช่องขวา มองจากด้านหลัง
+  for (pos = 120; pos >= 30; pos -= 1) {  // ช่องขวา มองจากด้านหลัง
     //  for (pos = 30; pos <= 120; pos += 1) { // ช่องซ้าย มองจากด้านหลัง
     cup.write(pos);
-    delay(50);
+    delay(30);
   }
 
   Serial.println("water pump");
@@ -151,14 +151,14 @@ void feedBeer(int b230, int b300, int b400) {
       //      if (delTime >= stepTime) { //measureFlow in each stepTime. For example: each 1 second)
       //        //              measureFlow();
       //      }
-
-      unsigned long currentMillis = millis();
-      if (currentMillis - previousTime >= 1000) {
-        previousTime = currentMillis;
-        count++;
-      }
-
-      digitalWrite(RELAY, LOW);
+      //
+      //      unsigned long currentMillis = millis();
+      //      if (currentMillis - previousTime >= 1000) {
+      //        previousTime = currentMillis;
+      //        count++;
+      //      }
+      //
+      //      digitalWrite(RELAY, LOW);
 
 
 
@@ -177,19 +177,26 @@ void feedBeer(int b230, int b300, int b400) {
       //      Serial.println(" mL/Minute");
 
       //      cup.write(120);
-      //      cup.write(30);
-      //      Serial.println(count);
+      cup.write(30);
+      Serial.println(count);
+      digitalWrite(RELAY, LOW);
+      count++;
+      delay(1000);
 
-
-      //      digitalWrite(RELAY, LOW);
-      //      count++;
-      //      delay(1000);
       //      calFlow();
     }
   } else if (b300 != 0) {
     while (count <= b300) {
-      //      cup.write(120);
+      //      unsigned long currentMillis = millis();
+      //      if (currentMillis - previousTime >= 1000) {
+      //        previousTime = currentMillis;
+      //        count++;
+      //      }
       //      cup.write(30);
+      //      digitalWrite(RELAY, LOW);
+
+      //      cup.write(120);
+      cup.write(30);
       Serial.println(count);
       digitalWrite(RELAY, LOW);
       count++;
@@ -197,8 +204,17 @@ void feedBeer(int b230, int b300, int b400) {
     }
   } else if (b400 != 0) {
     while (count <= b400) {
-      //      cup.write(120);
+      //      unsigned long currentMillis = millis();
+      //      if (currentMillis - previousTime >= 1000) {
+      //        previousTime = currentMillis;
+      //        count++;
+      //      }
       //      cup.write(30);
+      //      digitalWrite(RELAY, LOW);
+
+
+      //      cup.write(120);
+      cup.write(30);
       Serial.println(count);
       digitalWrite(RELAY, LOW);
       count++;
@@ -213,7 +229,7 @@ void feedBeer(int b230, int b300, int b400) {
   //  for (pos = 120; pos >= 30; pos -= 1) { // ช่องซ้าย มองจากด้านหลัง
   for (pos = 30; pos <= 120; pos += 1) { // ช่องขวา มองจากด้านหลัง
     cup.write(pos);
-    delay(50);
+    delay(30);
   }
   cup.detach();
 
@@ -357,7 +373,7 @@ void loop() {
     lcd.print("                    ");
     //    state = true;
 
-    feedBeer(0, 0, 15);
+    feedBeer(0, 0, 13);
   }
 }
 
