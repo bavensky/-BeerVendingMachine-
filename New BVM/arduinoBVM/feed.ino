@@ -23,14 +23,6 @@ void feedBeer(int b230, int b300, int b400) {
     }
   } else if (b300 != 0) {
     while (count <= b300) {
-      //      unsigned long currentMillis = millis();
-      //      if (currentMillis - previousTime >= 1000) {
-      //        previousTime = currentMillis;
-      //        count++;
-      //      }
-      //      cup.write(30);
-      //      digitalWrite(RELAY, LOW);
-
       //      cup.write(120); // blue lcd
       cup.write(30); // yellow lcd
       Serial.println(count);
@@ -40,15 +32,6 @@ void feedBeer(int b230, int b300, int b400) {
     }
   } else if (b400 != 0) {
     while (count <= b400) {
-      //      unsigned long currentMillis = millis();
-      //      if (currentMillis - previousTime >= 1000) {
-      //        previousTime = currentMillis;
-      //        count++;
-      //      }
-      //      cup.write(30);
-      //      digitalWrite(RELAY, LOW);
-
-
       //      cup.write(120); // blue lcd
       cup.write(30); // yellow lcd
       Serial.println(count);
@@ -57,7 +40,6 @@ void feedBeer(int b230, int b300, int b400) {
       delay(1000);
     }
   }
-
 
   digitalWrite(RELAY, HIGH);
   count = 0;
@@ -68,8 +50,4 @@ void feedBeer(int b230, int b300, int b400) {
     delay(30);
   }
   cup.detach();
-
-
-  //    state = false;
-  //  }
 }

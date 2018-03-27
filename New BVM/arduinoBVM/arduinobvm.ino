@@ -84,7 +84,7 @@ const float coeff = 7.5;
 volatile uint16_t pulseCount;
 float flowRate; // (L/min)
 float flowRateMLS; // (mL/sec)
-float flowCumVol; // (L or mL) Cumulative water volume which flow through flow meter.
+float flowCumVol; // (L or mL)
 unsigned long previousTime;
 unsigned long currentTime;
 unsigned long delTime;
@@ -108,8 +108,8 @@ void setup()  {
 
 
   cup.attach(CUP);
-  //  cup.write(30);  // blue lcd
-  cup.write(120); // yellow lcd
+  //  cup.write(30);  // blue lcd set servo to base
+  cup.write(120); // yellow lcd set servo to base
 
 
   pinMode(BT1, INPUT_PULLUP);
@@ -126,21 +126,13 @@ void setup()  {
 
   pinMode(FLOW, INPUT);
   digitalWrite(FLOW, HIGH);
-  //  previousTime = 0;
-  //  flowRate = 0;
-  //  flowRateMLS = 0;
-  //  flowCumVol = 0;
-  //  pulseCount = 0;
-  //  flowMilliLitres   = 0;
-  //  totalMilliLitres  = 0;
-  //  oldTime           = 0;
 
-  //  attachInterrupt(0, pulseCounter, FALLING);
   //  attachInterrupt(0, rpm, FALLING);
 
-  EEPROM.write(addrBeer, 3000);  // set default 3 litre
+  EEPROM.write(addrBeer, 30);  // set default 3 litre
+
   valBeer = EEPROM.read(addrBeer);
-  //  valBeer = valBeer * 100;
+  valBeer = valBeer * 100;
 
 
 }
@@ -161,16 +153,6 @@ void loop() {
   lcd.print("                    ");
   lcd.setCursor(0, 3);
   lcd.print(" Reduce bubble Beer ");
-
-  //  Serial.println("main...");
-  //  Serial.print(digitalRead(BT1));
-  //  Serial.print("  ");
-  //  Serial.print(digitalRead(BT2));
-  //  Serial.print("  ");
-  //  Serial.print(digitalRead(BT3));
-  //  Serial.print("  ");
-  //  Serial.println(digitalRead(BT4));
-
 
   if (valBeer <= 400) {
     digitalWrite(LED, HIGH);
@@ -193,9 +175,9 @@ void loop() {
   // manual mode
   while (digitalRead(BT1) == 0) {
     delay(100);
-    //    Serial.println("manual modes");
     digitalWrite(RELAY, LOW);
-    //    calFlow();
+
+//    sentData(10, 20, 30);
 
     if ((millis() - oldTime) > 1000)   // Only process counters once per second
     {
@@ -205,8 +187,6 @@ void loop() {
       lcd.print("  In stock : ");
       lcd.print(valBeer / 1000);
       lcd.print("L   ");
-      //      countTime++;
-      //      Serial.println(countTime);
     }
   }
 
@@ -218,9 +198,12 @@ void loop() {
   if (digitalRead(BT2) == 0) {
     delay(100);
     valBeer -= 230;
-    EEPROM.write(addrBeer, valBeer);  // update beer in stock
+
+    EEPROM.write(addrBeer, valBeer / 100); // update beer in stock
 
     beer230 += 1;
+    Serial.print("beer230 = ");
+    Serial.println(beer230);
     sentData(beer230, beer300, beer400);
 
     lcd.setCursor(0, 0);
@@ -234,6 +217,7 @@ void loop() {
     lcd.print("                    ");
     lcd.setCursor(0, 3);
     lcd.print("                    ");
+
     feedBeer(8, 0, 0);
   }
 
@@ -244,8 +228,8 @@ void loop() {
   if (digitalRead(BT3) == 0) {
     delay(100);
     valBeer -= 300;
-    EEPROM.write(addrBeer, valBeer);  // update beer in stock
-    
+    EEPROM.write(addrBeer, valBeer / 100); // update beer in stock
+
     beer300 += 1;
     sentData(beer230, beer300, beer400);
 
@@ -260,7 +244,7 @@ void loop() {
     lcd.print("                    ");
     lcd.setCursor(0, 3);
     lcd.print("                    ");
-    //    state = true;
+
     feedBeer(0, 10, 0);
   }
 
@@ -271,10 +255,8 @@ void loop() {
   if (digitalRead(BT4) == 0) {
     delay(100);
     valBeer -= 400;
-    EEPROM.write(addrBeer, valBeer);  // update beer in stock
+    EEPROM.write(addrBeer, valBeer / 100); // update beer in stock
 
-
-    Serial.println("button beer 400 press");
     beer400 += 1;
     sentData(beer230, beer300, beer400);
 
@@ -289,7 +271,6 @@ void loop() {
     lcd.print("                    ");
     lcd.setCursor(0, 3);
     lcd.print("                    ");
-    //    state = true;
 
     feedBeer(0, 0, 11);
   }

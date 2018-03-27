@@ -18,8 +18,13 @@ void doHttpGet(int Ibeer1, int Ibeer2, int Ibeer3) {
   Serial.print("[HTTP] begin...\n");
 
 
+  // yellow lcd
   http.begin("http://api.thingspeak.com/update?api_key=" + apiKey + "&field1=" + String(Ibeer1)
              + "&field2=" + String(Ibeer2) + "&field3=" + String(Ibeer3));
+
+//  // blue lcd
+//  http.begin("http://api.thingspeak.com/update?api_key=" + apiKey + "&field4=" + String(Ibeer1)
+//             + "&field5=" + String(Ibeer2) + "&field6=" + String(Ibeer3));
 
 
   // start connection and send HTTP header
