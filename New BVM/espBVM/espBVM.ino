@@ -19,7 +19,7 @@ void doHttpGet(int Ibeer1, int Ibeer2, int Ibeer3) {
 
 
   http.begin("http://api.thingspeak.com/update?api_key=" + apiKey + "&field1=" + String(Ibeer1)
-             + "&field2=" + String(Ibeer2) + "&field3=" + String(Ibeer3)); //HTTP
+             + "&field2=" + String(Ibeer2) + "&field3=" + String(Ibeer3));
 
 
   // start connection and send HTTP header
@@ -69,30 +69,36 @@ void setup() {
 }
 
 void loop() {
-  JsonObject& slave = jsonBuffer.parseObject(chat);
-  int small = slave["small"];
-  int medium = slave["medium"];
-  int large =  slave["large"];
+  if (WiFi.status() == WL_CONNECTED) {
+    JsonObject& slave = jsonBuffer.parseObject(chat);
+    int small = slave["small"];
+    int medium = slave["medium"];
+    int large =  slave["large"];
 
-  //  int small = slave["data"][0];
-  //  int medium = slave["data"][1];
-  //  int large =  slave["data"][2];
+    //  int small = slave["data"][0];
+    //  int medium = slave["data"][1];
+    //  int large =  slave["data"][2];
 
-  Serial.print("parseObject : ");
-  Serial.print(small);
-  Serial.print("  ");
-  Serial.print(medium);
-  Serial.print("  ");
-  Serial.println(large);
-  delay(500);
+    Serial.print("parseObject : ");
+    Serial.print(small);
+    Serial.print("  ");
+    Serial.print(medium);
+    Serial.print("  ");
+    Serial.println(large);
+    delay(500);
 
-  if (small != 0) {
-    doHttpGet(small, medium, large);
+    if (small != 0) {
+      doHttpGet(small, medium, large);
+    }
+
+
+    jsonBuffer.clear();
+
   }
-
-
-  jsonBuffer.clear();
-
-
+  else  {
+    Serial.println("connection lost, reconnect...");
+    WiFi.begin(ssid, password);
+    delay(500);
+  }
 }
 
