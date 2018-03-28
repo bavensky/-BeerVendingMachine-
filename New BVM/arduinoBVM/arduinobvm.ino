@@ -127,9 +127,7 @@ void setup()  {
   pinMode(FLOW, INPUT);
   digitalWrite(FLOW, HIGH);
 
-  //  attachInterrupt(0, rpm, FALLING);
-
-  EEPROM.write(addrBeer, 30);  // set default 3 litre
+  //    EEPROM.write(addrBeer, 30);  // set default 3 litre
 
   valBeer = EEPROM.read(addrBeer);
   valBeer = valBeer * 100;
@@ -177,7 +175,7 @@ void loop() {
     delay(100);
     digitalWrite(RELAY, LOW);
 
-//    sentData(10, 20, 30);
+    //    sentData(10, 20, 30);
 
     if ((millis() - oldTime) > 1000)   // Only process counters once per second
     {

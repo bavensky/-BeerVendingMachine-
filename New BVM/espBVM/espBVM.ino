@@ -22,9 +22,9 @@ void doHttpGet(int Ibeer1, int Ibeer2, int Ibeer3) {
   http.begin("http://api.thingspeak.com/update?api_key=" + apiKey + "&field1=" + String(Ibeer1)
              + "&field2=" + String(Ibeer2) + "&field3=" + String(Ibeer3));
 
-//  // blue lcd
-//  http.begin("http://api.thingspeak.com/update?api_key=" + apiKey + "&field4=" + String(Ibeer1)
-//             + "&field5=" + String(Ibeer2) + "&field6=" + String(Ibeer3));
+  //  // blue lcd
+  //  http.begin("http://api.thingspeak.com/update?api_key=" + apiKey + "&field4=" + String(Ibeer1)
+  //             + "&field5=" + String(Ibeer2) + "&field6=" + String(Ibeer3));
 
 
   // start connection and send HTTP header
@@ -80,9 +80,9 @@ void loop() {
     int medium = slave["medium"];
     int large =  slave["large"];
 
-    //  int small = slave["data"][0];
-    //  int medium = slave["data"][1];
-    //  int large =  slave["data"][2];
+    //    int small = slave["data"][0];
+    //    int medium = slave["data"][1];
+    //    int large =  slave["data"][2];
 
     Serial.print("parseObject : ");
     Serial.print(small);
