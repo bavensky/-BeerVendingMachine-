@@ -50,8 +50,8 @@
 #include <EEPROM.h>
 
 
-LiquidCrystal_I2C lcd(0x27, 20, 4);   // yellow lcd
-//LiquidCrystal_I2C lcd(0x3f, 20, 4);     // blue lcd
+//LiquidCrystal_I2C lcd(0x27, 20, 4);   // yellow lcd
+LiquidCrystal_I2C lcd(0x3f, 20, 4);     // blue lcd
 SoftwareSerial chat(10, 11); // RX, TX
 StaticJsonBuffer<200> jsonBuffer;
 JsonObject& master = jsonBuffer.createObject();
@@ -108,8 +108,8 @@ void setup()  {
 
 
   cup.attach(CUP);
-  //  cup.write(30);  // blue lcd set servo to base
-  cup.write(120); // yellow lcd set servo to base
+  cup.write(30);  // blue lcd set servo to base
+  //  cup.write(120); // yellow lcd set servo to base
 
 
   pinMode(BT1, INPUT_PULLUP);
@@ -127,7 +127,7 @@ void setup()  {
   pinMode(FLOW, INPUT);
   digitalWrite(FLOW, HIGH);
 
-  //    EEPROM.write(addrBeer, 30);  // set default 3 litre
+//  EEPROM.write(addrBeer, 30);  // set default 3 litre
 
   valBeer = EEPROM.read(addrBeer);
   valBeer = valBeer * 100;
@@ -216,7 +216,7 @@ void loop() {
     lcd.setCursor(0, 3);
     lcd.print("                    ");
 
-    feedBeer(8, 0, 0);
+    feedBeer(7, 0, 0);
   }
 
 
@@ -243,7 +243,7 @@ void loop() {
     lcd.setCursor(0, 3);
     lcd.print("                    ");
 
-    feedBeer(0, 10, 0);
+    feedBeer(0, 9, 0);
   }
 
 
