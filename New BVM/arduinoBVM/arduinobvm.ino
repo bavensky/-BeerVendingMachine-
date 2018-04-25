@@ -67,6 +67,8 @@ Servo cup;
 #define BT2       5
 #define BT3       6
 #define BT4       7
+//#define RSBT      3   // Yellow
+#define RSBT      A2  //  Blue
 
 volatile int NbTopsFan;
 int Calc;
@@ -108,8 +110,8 @@ void setup()  {
 
 
   cup.attach(CUP);
-  cup.write(30);  // blue lcd set servo to base
-  //  cup.write(120); // yellow lcd set servo to base
+    cup.write(30);  // blue lcd set servo to base
+//  cup.write(120); // yellow lcd set servo to base
 
 
   pinMode(BT1, INPUT_PULLUP);
@@ -117,6 +119,7 @@ void setup()  {
   pinMode(BT3, INPUT_PULLUP);
   pinMode(BT4, INPUT_PULLUP);
   pinMode(FLOW, INPUT_PULLUP);
+  pinMode(RSBT, INPUT_PULLUP);
 
   pinMode(RELAY, OUTPUT);
   digitalWrite(RELAY, HIGH);
@@ -127,7 +130,7 @@ void setup()  {
   pinMode(FLOW, INPUT);
   digitalWrite(FLOW, HIGH);
 
-//  EEPROM.write(addrBeer, 30);  // set default 3 litre
+  //  EEPROM.write(addrBeer, 100);  // set default 3 litre
 
   valBeer = EEPROM.read(addrBeer);
   valBeer = valBeer * 100;
@@ -140,6 +143,7 @@ void loop() {
   // turn off relay
   digitalWrite(RELAY, HIGH);
   countTime = 0;
+
 
   // main display
   lcd.print("      Welcome       ");
@@ -159,7 +163,31 @@ void loop() {
     digitalWrite(LED, LOW);
   }
 
+
+
+//  Serial.print("RSBT press ");
+//  Serial.println(digitalRead(RSBT));
+//  Serial.print("valBeer ");
+//  Serial.println(valBeer);
+
+  if (digitalRead(RSBT) == 0) {
+    Serial.println("RSBT press");
+    EEPROM.write(addrBeer, 100);  // set default 3 litre
+    valBeer = EEPROM.read(addrBeer);
+    valBeer = valBeer * 100;
+    delay(1000);
+  }
+
+
   while (stateBeer == true) {
+    if (digitalRead(RSBT) == 0) {
+      EEPROM.write(addrBeer, 100);  // set default 3 litre
+      valBeer = EEPROM.read(addrBeer);
+      valBeer = valBeer * 100;
+      delay(2000);
+      stateBeer = false;
+    }
+
     lcd.print("      Welcome       ");
     lcd.setCursor(0, 1);
     lcd.print("    Out of Stock    ");
