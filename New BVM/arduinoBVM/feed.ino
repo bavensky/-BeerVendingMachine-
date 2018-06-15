@@ -13,7 +13,7 @@ void feedBeer(int b230, int b300, int b400) {
   delay(1000);
 
 
-  if (b230 != 0) {
+  if (b230 != 0) { // ปั๊มเบียร์ 230 ml
     while (count <= b230) {
       cup.write(120);  // blue lcd
       //            cup.write(30); // yellow lcd
@@ -22,7 +22,7 @@ void feedBeer(int b230, int b300, int b400) {
       count++;
       delay(1000);
     }
-  } else if (b300 != 0) {
+  } else if (b300 != 0) { // ปั๊มเบียร์ 300 ml
     while (count <= b300) {
       cup.write(120); // blue lcd
       //            cup.write(30); // yellow lcd
@@ -31,7 +31,7 @@ void feedBeer(int b230, int b300, int b400) {
       count++;
       delay(1000);
     }
-  } else if (b400 != 0) {
+  } else if (b400 != 0) { // ปั๊มเบียร์ 400 ml
     while (count <= b400) {
       cup.write(120); // blue lcd
       //            cup.write(30); // yellow lcd
