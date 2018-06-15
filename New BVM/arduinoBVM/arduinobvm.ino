@@ -42,22 +42,22 @@
 */
 
 
-#include <Wire.h>
-#include <Servo.h>
-#include <ArduinoJson.h>
-#include <LiquidCrystal_I2C.h>
-#include <SoftwareSerial.h>
-#include <EEPROM.h>
+#include <Wire.h> // เรียกใช้งานไลบรารี่เชื่อมต่อแบบ I2C
+#include <Servo.h> // เรียกใช้งานไลบรารี่เซอร์โซ
+#include <ArduinoJson.h> // เรียกใช้งานไลบรารี่แปลงข้อมูล Json
+#include <LiquidCrystal_I2C.h> // เรียกใช้งานไลบรารี่แสดงผลจอผลึกเหลว
+#include <SoftwareSerial.h> // เรียกใช้งานไลบรารี่การเชื่อมต่อพอร์ตอนุกรมแบบซอฟแวร์
+#include <EEPROM.h> // เรียกใช้งานไลบรารี่หน่วยความจำ EEPROM
 
-
+// กำหนดรูปแบบการแสดงผล
 //LiquidCrystal_I2C lcd(0x27, 20, 4);   // yellow lcd
 LiquidCrystal_I2C lcd(0x3f, 20, 4);     // blue lcd
-SoftwareSerial chat(10, 11); // RX, TX
-StaticJsonBuffer<200> jsonBuffer;
+SoftwareSerial chat(10, 11); // RX, TX 
+StaticJsonBuffer<200> jsonBuffer; // สร้างบับเฟอร์สำหรับเก็บข้อมูล
 JsonObject& master = jsonBuffer.createObject();
-Servo cup;
+Servo cup; // เรียกใช้งานออบเจคเซอร์โว
 
-
+// ประกาศตัวแปร และขาใช้งาน
 #define addrBeer  19  // address EEPROM
 #define FLOW      2
 #define CUP       8
@@ -101,19 +101,19 @@ unsigned long oldTime;
 float calibrationFactor = 4.5;
 
 void setup()  {
-  Serial.begin(9600);
-  chat.begin(4800);
+  Serial.begin(9600);  // เรียกใช้งานการเชื่อมต่อพอร์ตอนุกรมแบบฮาร์ดแวร์
+  chat.begin(4800); // เรียกใช้งานการเชื่อมต่อพอร์ตอนุกรมแบบซอฟแร์
   delay(1000);
 
-  lcd.begin();
+  lcd.begin(); // เรียกใช้งานการแสดงผลจอผลึกเหลว
   lcd.backlight();
 
 
-  cup.attach(CUP);
+  cup.attach(CUP); // เรียกใช้งานออบเจคเซอร์โว
     cup.write(30);  // blue lcd set servo to base
 //  cup.write(120); // yellow lcd set servo to base
 
-
+// กำหนดขาสัญญาณรับข้อมูล และส่งข้อมูล
   pinMode(BT1, INPUT_PULLUP);
   pinMode(BT2, INPUT_PULLUP);
   pinMode(BT3, INPUT_PULLUP);
@@ -131,7 +131,7 @@ void setup()  {
   digitalWrite(FLOW, HIGH);
 
   //  EEPROM.write(addrBeer, 100);  // set default 3 litre
-
+// กำหนดการเก็บข้อมูล EEPROM
   valBeer = EEPROM.read(addrBeer);
   valBeer = valBeer * 100;
 
@@ -170,6 +170,7 @@ void loop() {
 //  Serial.print("valBeer ");
 //  Serial.println(valBeer);
 
+   // ตรวจสอบการกดสวิตซ์
   if (digitalRead(RSBT) == 0) {
     Serial.println("RSBT press");
     EEPROM.write(addrBeer, 100);  // set default 3 litre
