@@ -1,3 +1,4 @@
+// ฟังก์ชันสำหรับปั๊มเบียร์
 void feedBeer(int b230, int b300, int b400) {
 
   //  while (state == true) {
