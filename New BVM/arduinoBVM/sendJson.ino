@@ -1,3 +1,4 @@
+// ส่งข้อมูลแบบ Json ไปยังพอร์ตอนุกรมแบบซอฟแวร์
 void sentData(int small, int medium, int large) {
   JsonObject& data = jsonBuffer.createObject();
   data["small"] = small;
