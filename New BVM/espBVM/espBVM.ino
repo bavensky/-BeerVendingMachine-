@@ -1,19 +1,19 @@
-#include <ArduinoJson.h>
-#include <SoftwareSerial.h>
-#include <ESP8266WiFi.h>
-#include <ESP8266HTTPClient.h>
+#include <ArduinoJson.h>  // เรียกใช้งานไลบรารี่การแปลงข้อมูลรูปแบบ Json
+#include <SoftwareSerial.h> // เรียกใช้งานไลบรารี่จำลองการสื่อสารอนุกรม
+#include <ESP8266WiFi.h> // เรียกใช้งานไลบรารี่จเชื่อมต่อไวไฟ
+#include <ESP8266HTTPClient.h> // เรียกใช้งานไลบรารี่จส่งข้อมูลแบบ HTTP
 
 
-SoftwareSerial chat(12, 14); // RX, TX
-StaticJsonBuffer<200> jsonBuffer;
-WiFiClient client;
-const char* ssid = "CMMC_Sinet_2.4G";
-const char* password = "zxc12345";
-String apiKey = "4QLHRBN0XRHRD4SJ";
+SoftwareSerial chat(12, 14); // RX, TX // จำลองการสื่อสารอนุกรม
+StaticJsonBuffer<200> jsonBuffer;  // สร้างบับเฟอร์สำหรับเก็บข้อมูล
+WiFiClient client; // เรียกใช้งานออบเจค WiFiClient
+const char* ssid = "CMMC_Sinet_2.4G"; // กำหนด ssid สำหรับเชื่อมต่อไวไฟ
+const char* password = "zxc12345";  // กำหนด password สำหรับเชื่อมต่อไวไฟ
+String apiKey = "4QLHRBN0XRHRD4SJ"; // กำหนด apiKey สำหรับส่งข้อมูลขึ้น Thingspeak
 byte timeOutWIFI = 0;
 
 
-void doHttpGet(int Ibeer1, int Ibeer2, int Ibeer3) {
+void doHttpGet(int Ibeer1, int Ibeer2, int Ibeer3) {  // ฟังก์ชันรับค่าตัวแปร 3 ตัว เพื่อส่งข้อมูลไปยัง Thingspeak
   HTTPClient http;
   Serial.print("[HTTP] begin...\n");
 
@@ -53,11 +53,11 @@ void doHttpGet(int Ibeer1, int Ibeer2, int Ibeer3) {
 
 
 void setup() {
-  Serial.begin(9600);
-  chat.begin(4800);
+  Serial.begin(9600);  // เริ่มต้นใช้งานพอร์ตอนุกรมแบบฮาร์ดแวร์
+  chat.begin(4800); // เริ่มต้นใช้งานพอร์ตอนุกรมแบบซอฟแวร์
   delay(10);
 
-  WiFi.begin(ssid, password);
+  WiFi.begin(ssid, password); // เชื่อมต่อไวไฟ
 
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
@@ -68,14 +68,14 @@ void setup() {
     Serial.print(".");
   }
   Serial.println("WiFi connected");
-  pinMode(LED_BUILTIN, OUTPUT);
+  pinMode(LED_BUILTIN, OUTPUT); // กำหนดการแสดงผลสำหรับหลอด LED
   digitalWrite(LED_BUILTIN, HIGH);
 
 }
 
 void loop() {
-  if (WiFi.status() == WL_CONNECTED) {
-    JsonObject& slave = jsonBuffer.parseObject(chat);
+  if (WiFi.status() == WL_CONNECTED) { // หากมีการเชื่อมต่อไวไฟ
+    JsonObject& slave = jsonBuffer.parseObject(chat); // เรียกใช้ออบเจคเพื่อเก็บข้อมูลที่อ่านได้จากพอร์ตอนุกรมแบบซอฟแวร์
     int small = slave["small"];
     int medium = slave["medium"];
     int large =  slave["large"];
@@ -84,7 +84,7 @@ void loop() {
     //    int medium = slave["data"][1];
     //    int large =  slave["data"][2];
 
-    Serial.print("parseObject : ");
+    Serial.print("parseObject : "); // แปลงข้อมูลจากออบเจค 
     Serial.print(small);
     Serial.print("  ");
     Serial.print(medium);
@@ -93,11 +93,11 @@ void loop() {
     delay(500);
 
     if (small != 0) {
-      doHttpGet(small, medium, large);
+      doHttpGet(small, medium, large); // ส่งข้อมูลไปยัง Thingspeak
     }
 
 
-    jsonBuffer.clear();
+    jsonBuffer.clear(); // เครียข้อมูลในออบเจค 
 
   }
   else  {
