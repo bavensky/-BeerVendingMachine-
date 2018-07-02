@@ -145,18 +145,18 @@ void loop() {
   countTime = 0;
 
 
-  // main display
+  // แสดงผลหน้าจอหลัก
   lcd.print("      Welcome       ");
-  lcd.setCursor(0, 1);
+  lcd.setCursor(0, 1); // แสดงผลหน้าจอบรรทัดที่ 2 
   lcd.print("  In stock : ");
   lcd.print(valBeer / 1000);
   lcd.print("L   ");
-  lcd.setCursor(0, 2);
+  lcd.setCursor(0, 2); // แสดงผลหน้าจอบรรทัดที่ 3
   lcd.print("                    ");
-  lcd.setCursor(0, 3);
+  lcd.setCursor(0, 3); // แสดงผลหน้าจอบรรทัดที่ 4
   lcd.print(" Reduce bubble Beer ");
 
-  if (valBeer <= 400) {
+  if (valBeer <= 400) { // ตรวจสอบปริมาณบียร์ที่เหลือ
     digitalWrite(LED, HIGH);
     stateBeer = true;
   } else {
@@ -221,18 +221,19 @@ void loop() {
   //    delay(10000); //300 ml
   //    delay(12500); //400 ml
 
-  // feed 230 ml
+  // ปั๊มเบียร์ 230 ml
   if (digitalRead(BT2) == 0) {
     delay(100);
-    valBeer -= 230;
+    valBeer -= 230;  // ลบค่าปริมาณเบียร์
 
     EEPROM.write(addrBeer, valBeer / 100); // update beer in stock
 
-    beer230 += 1;
+    beer230 += 1;  // นับจำนวนเบียร์ขนาด 230
     Serial.print("beer230 = ");
-    Serial.println(beer230);
-    sentData(beer230, beer300, beer400);
+    Serial.println(beer230); 
+    sentData(beer230, beer300, beer400); // ส่งข้อมูลผ่านพอร์ตอนุกรม
 
+    // แสดงผลไปยังหน้าจอหลัก
     lcd.setCursor(0, 0);
     lcd.print("             230 ml.");
     lcd.setCursor(0, 1);
@@ -245,21 +246,22 @@ void loop() {
     lcd.setCursor(0, 3);
     lcd.print("                    ");
 
-    feedBeer(7, 0, 0);
+    feedBeer(7, 0, 0);  // เข้าฟังก์ชันสำหรับปั๊มเบียร์
   }
 
 
 
 
-  // feed 300 ml
+  // ปั๊มเบียร์ 300 ml
   if (digitalRead(BT3) == 0) {
     delay(100);
-    valBeer -= 300;
+    valBeer -= 300;  // ลบค่าปริมาณเบียร์
     EEPROM.write(addrBeer, valBeer / 100); // update beer in stock
 
     beer300 += 1;
-    sentData(beer230, beer300, beer400);
+    sentData(beer230, beer300, beer400); // ส่งข้อมูลผ่านพอร์ตอนุกรม
 
+    // แสดงผลไปยังหน้าจอหลัก
     lcd.setCursor(0, 0);
     lcd.print("             300 ml.");
     lcd.setCursor(0, 1);
@@ -272,21 +274,20 @@ void loop() {
     lcd.setCursor(0, 3);
     lcd.print("                    ");
 
-    feedBeer(0, 9, 0);
+    feedBeer(0, 9, 0);  // เข้าฟังก์ชันสำหรับปั๊มเบียร์
   }
 
 
-
-
-  // feed 400 ml
+  // ปั๊มเบียร์ 400 ml
   if (digitalRead(BT4) == 0) {
     delay(100);
-    valBeer -= 400;
+    valBeer -= 400; // ลบค่าปริมาณเบียร์
     EEPROM.write(addrBeer, valBeer / 100); // update beer in stock
 
     beer400 += 1;
-    sentData(beer230, beer300, beer400);
+    sentData(beer230, beer300, beer400); // ส่งข้อมูลผ่านพอร์ตอนุกรม
 
+    // แสดงผลไปยังหน้าจอหลัก
     lcd.setCursor(0, 0);
     lcd.print("             400 ml.");
     lcd.setCursor(0, 1);
@@ -299,8 +300,8 @@ void loop() {
     lcd.setCursor(0, 3);
     lcd.print("                    ");
 
-    feedBeer(0, 0, 11);
-  }
+    feedBeer(0, 0, 11);  // เข้าฟังก์ชันสำหรับปั๊มเบียร์
+  } 
 
 
 } // end loop
