@@ -2,10 +2,10 @@
    Beer Vending Machine
    RMUTL Senior Project
    Date   : 27/11/2560
-   Date   : 28/01/2561
+          : 28/01/2561
+          : 07/10/2561
 
    ---pin Connecting---
-
     UART Arduino to ESP8266
       TX      11    14
       RX      10    12
@@ -52,7 +52,7 @@
 // กำหนดรูปแบบการแสดงผล
 //LiquidCrystal_I2C lcd(0x27, 20, 4);   // yellow lcd
 LiquidCrystal_I2C lcd(0x3f, 20, 4);     // blue lcd
-SoftwareSerial chat(10, 11); // RX, TX 
+SoftwareSerial chat(10, 11); // RX, TX
 StaticJsonBuffer<200> jsonBuffer; // สร้างบับเฟอร์สำหรับเก็บข้อมูล
 JsonObject& master = jsonBuffer.createObject();
 Servo cup; // เรียกใช้งานออบเจคเซอร์โว
@@ -110,10 +110,11 @@ void setup()  {
 
 
   cup.attach(CUP); // เรียกใช้งานออบเจคเซอร์โว
-    cup.write(30);  // blue lcd set servo to base
-//  cup.write(120); // yellow lcd set servo to base
+  //    cup.write(30);  // blue lcd set servo to base
+  cup.write(90);
+  //  cup.write(120); // yellow lcd set servo to base
 
-// กำหนดขาสัญญาณรับข้อมูล และส่งข้อมูล
+  // กำหนดขาสัญญาณรับข้อมูล และส่งข้อมูล
   pinMode(BT1, INPUT_PULLUP);
   pinMode(BT2, INPUT_PULLUP);
   pinMode(BT3, INPUT_PULLUP);
@@ -131,7 +132,7 @@ void setup()  {
   digitalWrite(FLOW, HIGH);
 
   //  EEPROM.write(addrBeer, 100);  // set default 3 litre
-// กำหนดการเก็บข้อมูล EEPROM
+  // กำหนดการเก็บข้อมูล EEPROM
   valBeer = EEPROM.read(addrBeer);
   valBeer = valBeer * 100;
 
@@ -147,7 +148,7 @@ void loop() {
 
   // แสดงผลหน้าจอหลัก
   lcd.print("      Welcome       ");
-  lcd.setCursor(0, 1); // แสดงผลหน้าจอบรรทัดที่ 2 
+  lcd.setCursor(0, 1); // แสดงผลหน้าจอบรรทัดที่ 2
   lcd.print("  In stock : ");
   lcd.print(valBeer / 1000);
   lcd.print("L   ");
@@ -165,12 +166,12 @@ void loop() {
 
 
 
-//  Serial.print("RSBT press ");
-//  Serial.println(digitalRead(RSBT));
-//  Serial.print("valBeer ");
-//  Serial.println(valBeer);
+  //  Serial.print("RSBT press ");
+  //  Serial.println(digitalRead(RSBT));
+  //  Serial.print("valBeer ");
+  //  Serial.println(valBeer);
 
-   // ตรวจสอบการกดสวิตซ์
+  // ตรวจสอบการกดสวิตซ์
   if (digitalRead(RSBT) == 0) {
     Serial.println("RSBT press");
     EEPROM.write(addrBeer, 100);  // set default 3 litre
@@ -230,7 +231,7 @@ void loop() {
 
     beer230 += 1;  // นับจำนวนเบียร์ขนาด 230
     Serial.print("beer230 = ");
-    Serial.println(beer230); 
+    Serial.println(beer230);
     sentData(beer230, beer300, beer400); // ส่งข้อมูลผ่านพอร์ตอนุกรม
 
     // แสดงผลไปยังหน้าจอหลัก
@@ -301,7 +302,7 @@ void loop() {
     lcd.print("                    ");
 
     feedBeer(0, 0, 11);  // เข้าฟังก์ชันสำหรับปั๊มเบียร์
-  } 
+  }
 
 
 } // end loop
